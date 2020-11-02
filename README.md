@@ -7,7 +7,7 @@ V1 of this project was built with [Priya Ravi](https://github.com/priyaravi23) a
 - [Description](#Description)
 - [Screenshot](#Screenshot)
 - [License](#License)
-- [Author](#Author)
+- [Contact](#Contact)
 
 ## User Story
 As a movie lover, I want to discover new movies, create a watchlist, and see what my friends are watching so that I always have something to watch.
@@ -16,8 +16,7 @@ As a movie lover, I want to discover new movies, create a watchlist, and see wha
 ![](images/FANTINDER.png)
 
 ## License
-[MIT License](./LICENSE)
-![license](https://img.shields.io/badge/License-MIT-blue)
+[MIT License](./LICENSE) ![license](https://img.shields.io/badge/License-MIT-blue)
 
 ## Contact
 This version was built by Vanessa Lane. Get in touch! 
