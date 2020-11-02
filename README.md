@@ -1,11 +1,10 @@
-# V2 of FanTinder
+# Movie Matchmaker
 A MERN app to discover new movies, create a watchlist, and see what your friends are watching.
 
-V1 of this project was built with [Priya Ravi](https://github.com/priyaravi23) and [Anita Ganti](https://github.com/anitapeppercorn) as a final project for our UC Berkeley bootcamp. v1 is deployed at https://fantinder.herokuapp.com
-
 ## Contents
-- [Description](#Description)
+- [User Story](#User Story)
 - [Screenshot](#Screenshot)
+- [Starter Code](#Starter Code)
 - [License](#License)
 - [Contact](#Contact)
 
@@ -14,6 +13,9 @@ As a movie lover, I want to discover new movies, create a watchlist, and see wha
 
 ## Screenshot
 ![](images/FANTINDER.png)
+
+## Starter Code
+V1 of this project was built with [Priya Ravi](https://github.com/priyaravi23) and [Anita Ganti](https://github.com/anitapeppercorn) as a final project for our UC Berkeley bootcamp. v1 is deployed at https://fantinder.herokuapp.com
 
 ## License
 [MIT License](./LICENSE) ![license](https://img.shields.io/badge/License-MIT-blue)
