@@ -51,28 +51,38 @@ const MovieCard = (props) => {
         }
 
         // get the usernames
-        const usernames = likedUsers.filter(user => user.username !== undefined).map(user => user.username);
+        const otherUsers = likedUsers.filter(user => user._id !== state.currentUser);
+        const usernames = otherUsers.filter(user => user.username !== undefined).map(user => user.username);
 
-        // format the users, include if blocks to catch cases where there's no username available
-        switch (likedUsers.length) {
-            case 1:
-                if (usernames[0]) {
-                    return <Card.Text className='small'>{usernames[0]} liked this movie</Card.Text>
-                }
-                return <Card.Text className='small'>1 user liked this movie</Card.Text>
-            case 2:
-                if (usernames[0] && usernames[1]) {
-                    return <Card.Text className='small'>{usernames[0]} and {usernames[1]} liked this movie</Card.Text>
-                }
-                return <Card.Text className='small'>2 users liked this movie</Card.Text>
+        // format the liked users for the card
+        switch (true) {
+            case (otherUsers.length === 0):
+                return (
+                    <Card.Text className='small'>
+                        No other users have liked this movie!
+                    </Card.Text>
+                )
+            case (otherUsers.length === 1):
+                return (
+                    <Card.Text className='small'>
+                        {usernames[0]} {otherUsers.length < likedUsers.length ? 'also' : null } liked this movie
+                    </Card.Text>
+                )
+            case (otherUsers.length === 2):
+                return (
+                    <Card.Text className='small'>
+                        {usernames[0]} and {usernames[1]} {otherUsers.length < likedUsers.length ? 'also' : null } liked this movie
+                    </Card.Text>
+                )
+            case (otherUsers.length > 2):
+                const otherLength = otherUsers.length - 2;
+                return (
+                    <Card.Text className='small'>
+                        {usernames[0]}, {usernames[1]}, and {otherLength} other {otherLength === 1 ? 'user' : 'users'} {otherUsers.length < likedUsers.length ? 'also' : null } liked this movie
+                    </Card.Text>
+                )
             default:
-                if (usernames[0] && usernames[1]) {
-                    const otherLength = likedUsers.length - 2;
-                    return <Card.Text className='small'>
-                            {usernames[0]}, {usernames[1]}, and {otherLength} other {otherLength === 1 ? 'user' : 'users'} liked this movie
-                        </Card.Text>
-                }
-                return <Card.Text className='small'>{likedUsers.length} users liked this movie</Card.Text>
+                return null
         }
     }
 
