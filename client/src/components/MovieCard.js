@@ -43,7 +43,38 @@ const MovieCard = (props) => {
                 }
             </Button>
         );
-    }      
+    }
+
+    function displayLikedUsers(likedUsers) {
+        if (!likedUsers.length) {
+            return null
+        }
+
+        // get the usernames
+        const usernames = likedUsers.filter(user => user.username !== undefined).map(user => user.username);
+
+        // format the users, include if blocks to catch cases where there's no username available
+        switch (likedUsers.length) {
+            case 1:
+                if (usernames[0]) {
+                    return <Card.Text className='small'>{usernames[0]} liked this movie</Card.Text>
+                }
+                return <Card.Text className='small'>1 user liked this movie</Card.Text>
+            case 2:
+                if (usernames[0] && usernames[1]) {
+                    return <Card.Text className='small'>{usernames[0]} and {usernames[1]} liked this movie</Card.Text>
+                }
+                return <Card.Text className='small'>2 users liked this movie</Card.Text>
+            default:
+                if (usernames[0] && usernames[1]) {
+                    const otherLength = likedUsers.length - 2;
+                    return <Card.Text className='small'>
+                            {usernames[0]}, {usernames[1]}, and {otherLength} other {otherLength === 1 ? 'user' : 'users'} liked this movie
+                        </Card.Text>
+                }
+                return <Card.Text className='small'>{likedUsers.length} users liked this movie</Card.Text>
+        }
+    }
 
     return (
         movie
@@ -90,9 +121,10 @@ const MovieCard = (props) => {
                             <Card.Text>Plot Summary</Card.Text>
                             <Card.Text className='small'>{movie.overview}</Card.Text>
                             <Card.Text className='small'>Release Date: {movie.releaseDate}</Card.Text>
-                            <Card.Text className='small'>
-                                {`${movie.likedUsers.length} ${movie.likedUsers.length === 1 ? 'user' : 'users'} liked this movie`}
-                            </Card.Text>
+                            {movie.likedUsers
+                                ? displayLikedUsers(movie.likedUsers)
+                                : <Card.Text className='small'>No users have liked this movie</Card.Text>   
+                            }
                         </Card.Body>
                     </Accordion.Collapse>
 

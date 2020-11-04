@@ -101,7 +101,8 @@ const resolvers = {
                 { externalMovieId: input.externalMovieId },
                 input,
                 { upsert: true, new: true }
-            );
+            ).populate('likedUsers');
+            
             return movie;
         },
 
