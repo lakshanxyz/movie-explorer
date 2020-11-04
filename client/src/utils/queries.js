@@ -4,6 +4,8 @@ export const GET_USER = gql`
   {
     me {
       _id
+      username
+      email
       friends {
         _id
       }
@@ -20,10 +22,7 @@ export const GET_USER = gql`
         likedUsers {
           _id
           username
-        }
-        dislikedUsers {
-          _id
-          username
+          email
         }
       }
       dislikedMovies{
@@ -39,10 +38,7 @@ export const GET_USER = gql`
         likedUsers {
           _id
           username
-        }
-        dislikedUsers {
-          _id
-          username
+          email
         }
       }
     }
