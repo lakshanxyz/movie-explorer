@@ -23,7 +23,7 @@ export const reducer = (state, action) => {
         case UPDATE_CURRENT_USER:
             return {
                 ...state,
-                currentUser: action.username
+                currentUser: action.userId
             }
         case UPDATE_MOVIE_PREFERENCES:
             return {

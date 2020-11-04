@@ -11,7 +11,7 @@ import { reducer } from '../utils/reducers';
 
 // create a sample of what our global state will look like
 const initialState = {
-    currentUser: 'vanessa',
+    currentUser: 111,
     likedMovies: [
         {
             "externalMovieId": 1,
@@ -67,11 +67,11 @@ test('UPDATE_MOVIES', () => {
 test('UPDATE_CURRENT_USER', () => {
     let newState = reducer(initialState, {
         type: UPDATE_CURRENT_USER,
-        username: 'Akemi'
+        userId: 123
     });
 
-    expect(newState.currentUser).toBe('Akemi');
-    expect(initialState.currentUser).toBe('vanessa');
+    expect(newState.currentUser).toBe(123);
+    expect(initialState.currentUser).toBe(111);
 });
 
 test('UPDATE_MOVIE_PREFERENCES', () => {
