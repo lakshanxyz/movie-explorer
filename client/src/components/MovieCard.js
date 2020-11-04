@@ -38,8 +38,8 @@ const MovieCard = (props) => {
                 onClick={decoratedOnClick}
             >
                 {isCurrentEventKey
-                ?   <span className="small">Collapse <i className="fas fa-chevron-up"></i></span>
-                :   <span className="small">Click for details <i className="fas fa-chevron-down"></i></span>
+                ?   <span className="small">Collapse <i className="pl-1 fas fa-chevron-up"></i></span>
+                :   <span className="small">Click for details <i className="pl-1 fas fa-chevron-down"></i></span>
                 }
             </Button>
         );
@@ -77,7 +77,7 @@ const MovieCard = (props) => {
                             :   null
                             }
                             <Card.Text className="small">
-                            ({movie.voteCount?.toLocaleString()} ratings)
+                                ({movie.voteCount?.toLocaleString()} ratings)
                             </Card.Text>
                         </Col>
                         <Col className="text-right">
