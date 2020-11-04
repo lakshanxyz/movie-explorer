@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 // Components
 import { Container, Jumbotron } from 'react-bootstrap';
 import MovieCard from '../components/MovieCard';
+import { Swipeable, direction } from 'react-deck-swiper';
 // TMDB API
 import { getTrendingMovies } from '../utils/API';
 // GraphQL
@@ -219,6 +220,19 @@ const Homepage = () => {
             setMovieIndex('')
         }
     }
+
+    const handleSwipe = (swipeDirection) => {
+        if (Auth.loggedIn()) {
+            if (swipeDirection === direction.RIGHT) {
+                handleLikeMovie(movies[movieIndex]);
+            }
+            else if (swipeDirection === direction.LEFT) {
+                handleDislikeMovie(movies[movieIndex]);
+            }
+        } else {
+            handleSkipMovie();
+        }
+    }
     
     return(
         <>
@@ -226,8 +240,8 @@ const Homepage = () => {
                 <Container>
                     <h1>Welcome to Movie Explorer!</h1>
                     {Auth.loggedIn()
-                        ? <h4>Click thumbs up to like and save a movie, thumbs down to pass.</h4>
-                        : <h4>Check out our recommended movies below.</h4>
+                        ? <h4>A swipe right saves a movie. A swipe left passes.</h4>
+                        : <h4>Swipe or click through some of the trending movies!</h4>
                     }
                 </Container>
             </Jumbotron>
@@ -235,14 +249,16 @@ const Homepage = () => {
             <Container>
                 {loading ? <h2>Loading....</h2> : null}
                 {movies.length
-                ?   <MovieCard
-                        movie={movies[movieIndex]}
-                        displayTrailer
-                        displaySkip
-                        likeMovieHandler={handleLikeMovie}
-                        dislikeMovieHandler={handleDislikeMovie}
-                        skipMovieHandler={handleSkipMovie}
-                    />
+                ?   <Swipeable onSwipe={handleSwipe}>
+                        <MovieCard
+                            movie={movies[movieIndex]}
+                            displayTrailer
+                            displaySkip
+                            likeMovieHandler={handleLikeMovie}
+                            dislikeMovieHandler={handleDislikeMovie}
+                            skipMovieHandler={handleSkipMovie}
+                        />
+                    </Swipeable>
                 :  null
                 }
             </Container>
