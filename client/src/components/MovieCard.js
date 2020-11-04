@@ -63,11 +63,9 @@ const MovieCard = (props) => {
                     : (movie.poster && <Card.Img src={movie.poster} alt={`The cover for ${movie.title}`} variant='top' />)
                 }
                 <Card.Body>
-                    <Card.Title>
-                        {movie.title}
-                    </Card.Title>
+                    <Card.Title>{movie.title}</Card.Title>
                     <Row>
-                        <Col sm={6}>
+                        <Col xs={6}>
                             { movie.rating >= 0
                             ?   <StarRatings
                                     rating={movie.rating/2}
