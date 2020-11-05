@@ -36,6 +36,20 @@ body {
   color: $color-medium-text;
 }
 
+.btn-round-sm {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.btn-round-lg {
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  font-size: 20px;
+}
+
 @media (min-width: 576px) {
   .card-columns {
     column-count: 1;

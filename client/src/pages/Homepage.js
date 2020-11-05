@@ -23,6 +23,8 @@ const Homepage = () => {
     const [state, dispatch] = useFantinderContext();
     const { movies, likedMovies, dislikedMovies } = state
     const [movieIndex, setMovieIndex] = useState('');
+    const [moviesToDisplay, setMoviesToDisplay] = useState(true);
+    const [lastSwipe, setLastSwipe] = useState('');
     // GraphQL
     const [addMovie, { addMovieError }] = useMutation(ADD_MOVIE);
     const [dislikeMovie] = useMutation(DISLIKE_MOVIE);
@@ -77,9 +79,11 @@ const Homepage = () => {
 
                     if (!isLiked && !isDisliked && movies[i].trailer) {
                         setMovieIndex(i);
-                        break;
+                        setMoviesToDisplay(true);
+                        return;
                     }
                 }
+                setMoviesToDisplay(false);
             }
             // if they're logged in, set it to the first movie in the deck
             else {
@@ -167,7 +171,7 @@ const Homepage = () => {
                 idbPromise('dislikedMovies', 'delete', updatedLikedMovie);
 
                 // skip to the next movie
-                handleSkipMovie();
+                handleNextMovie();
             } else {
                 console.error("Couldn't like the movie!");
             }
@@ -198,7 +202,7 @@ const Homepage = () => {
                 idbPromise('dislikedMovies', 'put', updatedDislikedMovie);
 
                 // skip to the next movie
-                handleSkipMovie();
+                handleNextMovie();
             } else {
                 console.error("Couldn't dislike the movie!");
             }
@@ -206,35 +210,51 @@ const Homepage = () => {
         .catch(err => console.error(err));
     };
 
-    const handleSkipMovie = async () => {
+    const handlePrevMovie = async () => {
+        console.log(movieIndex);
+        setLastSwipe('')
+        if (movies.length) {
+            movieIndex === 0 ? setMovieIndex(movies.length - 1) : setMovieIndex(movieIndex - 1);
+        }
+    }
+
+    const handleNextMovie = async () => {
+        console.log(movieIndex);
+        setLastSwipe('')
         // put the current movie at the end of the array if it's not the only movie
         if (movies.length) {
-            for (let i=movieIndex + 1; i < movies.length; i++) {
-                const isLiked = likedMovies.some(likedMovie => likedMovie._id === movies[i]._id);
-                const isDisliked = dislikedMovies.some(dislikedMovie => dislikedMovie._id === movies[i]._id);
+            if (Auth.loggedIn()) {
+                for (let i=movieIndex + 1; i < movies.length; i++) {
+                    const isLiked = likedMovies.some(likedMovie => likedMovie._id === movies[i]._id);
+                    const isDisliked = dislikedMovies.some(dislikedMovie => dislikedMovie._id === movies[i]._id);
 
-                if (!isLiked && !isDisliked && movies[i].trailer) {
-                    setMovieIndex(i);
-                    break;
+                    if (!isLiked && !isDisliked && movies[i].trailer) {
+                        setMovieIndex(i);
+                        return;
+                    }
                 }
+                setMoviesToDisplay(false);
+            } else {
+                movieIndex === movies.length ? setMovieIndex(0) : setMovieIndex(movieIndex + 1);
             }
-        }
-        // if this is the only movie left, set moviesToDisplay to an empty array.
-        else {
-            setMovieIndex('')
         }
     }
 
     const handleSwipe = (swipeDirection) => {
-        if (Auth.loggedIn()) {
-            if (swipeDirection === direction.RIGHT) {
+        if (swipeDirection === direction.RIGHT) {
+            setLastSwipe('right')
+            if (Auth.loggedIn()) {
                 handleLikeMovie(movies[movieIndex]);
+            } else {
+                handlePrevMovie();
             }
-            else if (swipeDirection === direction.LEFT) {
+        } else if (swipeDirection === direction.LEFT) {
+            setLastSwipe('left')
+            if (Auth.loggedIn()) {
                 handleDislikeMovie(movies[movieIndex]);
+            } else {
+                handleNextMovie();
             }
-        } else {
-            handleSkipMovie();
         }
     }
     
@@ -253,18 +273,28 @@ const Homepage = () => {
             <Container>
                 {loading ? <h2>Loading....</h2> : null}
                 {movies.length
-                ?   <Swipeable onSwipe={handleSwipe}>
-                        <MovieCard
-                            movie={movies[movieIndex]}
-                            displayTrailer
-                            displaySkip
-                            likeMovieHandler={handleLikeMovie}
-                            dislikeMovieHandler={handleDislikeMovie}
-                            skipMovieHandler={handleSkipMovie}
-                        />
-                    </Swipeable>
+                ?   moviesToDisplay
+                    ?   <Swipeable
+                            onSwipe={handleSwipe}
+                            fadeThreshold={200}
+                            swipeThreshold={40}
+                            onAfterSwipe={() => console.log(`${movies[movieIndex].title} swiped`)}>
+                            <MovieCard
+                                movie={movies[movieIndex]}
+                                displayTrailer
+                                displaySkip
+                                likeMovieHandler={handleLikeMovie}
+                                dislikeMovieHandler={handleDislikeMovie}
+                                nextMovieHandler={handleNextMovie}
+                                prevMovieHandler={handlePrevMovie}
+                            />
+                        </Swipeable>
+                    :   <h3 className="text-center">No more movies to display!</h3>
                 :  null
                 }
+                <h4 className="text-center mt-3">
+                    {lastSwipe ? `You swiped ${lastSwipe} on ${movies[movieIndex].title}!` : null}
+                </h4>
             </Container>
         </>
     );
