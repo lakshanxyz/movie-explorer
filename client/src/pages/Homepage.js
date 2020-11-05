@@ -241,9 +241,9 @@ const Homepage = () => {
     }
 
     const handleSwipe = (swipeDirection) => {
-        if (swipeDirection === direction.RIGHT) {
-            setLastSwipe('right')
-            if (Auth.loggedIn()) {
+        event.preventDefault()
+        if (Auth.loggedIn()) {
+            if (swipeDirection === direction.RIGHT) {
                 handleLikeMovie(movies[movieIndex]);
             } else {
                 handlePrevMovie();
