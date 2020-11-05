@@ -4,6 +4,8 @@ import React, { useContext } from 'react';
 import { Accordion, AccordionContext, Button, Card, ResponsiveEmbed, Row, Col } from 'react-bootstrap';
 import StarRatings from 'react-star-ratings';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
+import { MdChevronRight, MdChevronLeft, MdFavoriteBorder, MdClose } from "react-icons/md";
+
 
 // import utils
 import Auth from '../utils/auth';
@@ -17,8 +19,9 @@ const MovieCard = (props) => {
         displayTrailer,
         likeMovieHandler,
         dislikeMovieHandler,
-        skipMovieHandler,
-        displaySkip
+        displaySkip,
+        nextMovieHandler,
+        prevMovieHandler
     } = props;
 
     function ContextAwareToggle({ eventKey, callback }) {
@@ -138,37 +141,46 @@ const MovieCard = (props) => {
                         </Card.Body>
                     </Accordion.Collapse>
 
-                {Auth.loggedIn()
-                ?   <Card.Footer className="d-flex justify-content-between">
-                        <Button
-                            className="movie-card-button"
-                            disabled={dislikedMovies?.some(dislikedMovie => dislikedMovie._id === movie._id)}
-                            variant={dislikedMovies?.some(dislikedMovie => dislikedMovie._id === movie._id) ? "outline-secondary" : "outline-danger"}
-                            onClick={() => dislikeMovieHandler(movie)}>
-                                {dislikedMovies?.some(dislikedMovie => dislikedMovie._id === movie._id)
-                                ? <span>Disliked!</span>
-                                : <i className='far fa-thumbs-down fa-2x' />}
+                <Card.Footer className="d-flex justify-content-center align-items-center">
+                    { displaySkip
+                    ?   <Button
+                            className="btn-round-sm mr-3"
+                            variant={"outline-secondary"}
+                            onClick={() => prevMovieHandler()}
+                        >
+                            <MdChevronLeft />
                         </Button>
-                        <Button
-                            className="movie-card-button"
-                            disabled={likedMovies?.some(likedMovie => likedMovie._id === movie._id)}
-                            variant={likedMovies?.some(likedMovie => likedMovie._id === movie._id) ? "outline-secondary" : "outline-success"}
-                            onClick={() => likeMovieHandler(movie)}>
-                                {likedMovies?.some(likedMovie => likedMovie._id === movie._id)
-                                ? <span>Liked!</span>
-                                : <i className='far fa-thumbs-up fa-2x' />}
-                        </Button>
-                    </Card.Footer>
-                :   displaySkip &&
-                        <Card.Footer className="text-center">
+                    :   null }
+                    {Auth.loggedIn()
+                    ?   <>
                             <Button
-                                className="movie-card-button"
-                                size="lg"
-                                onClick={skipMovieHandler}>
-                                    Next Movie
+                                className="btn-round-lg mr-3"
+                                disabled={dislikedMovies?.some(dislikedMovie => dislikedMovie._id === movie._id)}
+                                variant={dislikedMovies?.some(dislikedMovie => dislikedMovie._id === movie._id) ? "outline-secondary" : "outline-danger"}
+                                onClick={() => dislikeMovieHandler(movie)}
+                            >
+                                <MdClose />
                             </Button>
-                        </Card.Footer>
-                }
+                            <Button
+                                className="btn-round-lg mr-3"
+                                disabled={likedMovies?.some(likedMovie => likedMovie._id === movie._id)}
+                                variant={likedMovies?.some(likedMovie => likedMovie._id === movie._id) ? "outline-secondary" : "outline-success"}
+                                onClick={() => likeMovieHandler(movie)}
+                            >
+                                <MdFavoriteBorder />
+                            </Button>
+                        </>
+                    :   null }
+                    { displaySkip
+                    ?   <Button
+                            className="btn-round-sm"
+                            variant={"outline-secondary"}
+                            onClick={() => nextMovieHandler()}
+                        >
+                            <MdChevronRight />
+                        </Button>
+                    :   null }
+                </Card.Footer>
                 </Card>
             </Accordion>
         :   null

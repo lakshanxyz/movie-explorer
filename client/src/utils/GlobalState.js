@@ -11,7 +11,7 @@ const FantinderProvider = ({ value = [], ...props }) => {
       movies: [],  // array of all movies
       currentUser: ''  // current user's username
     });
-    console.log({state}); // comment this in to test!
+    // console.log({state}); // comment this in to test!
     return <Provider value={[state, dispatch]} {...props} />;
   };
 
