@@ -5,12 +5,6 @@ This app is deployed at https://vanessalane-movieexplorer.herokuapp.com/
 
 v1 of this project was built with [Priya Ravi](https://github.com/priyaravi23) and [Anita Ganti](https://github.com/anitapeppercorn) as a final project for our UC Berkeley bootcamp. v1 is deployed at https://fantinder.herokuapp.com
 
-## Contents
-- [Screenshot](#Screenshot)
-- [Starter Code](#Starter)
-- [License](#License)
-- [Contact](#Contact)
-
 ## Screenshot
 ![](images/FANTINDER.png)
 
