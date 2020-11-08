@@ -44,14 +44,13 @@ const MovieCard = (props) => {
       
         return (
             <Button
-                size="sm"
                 variant="link"
-                className={isCurrentEventKey ? 'text-muted' : ''}
+                className={isCurrentEventKey ? 'text-muted p-0' : 'p-0'}
                 onClick={decoratedOnClick}
             >
                 {isCurrentEventKey
-                ?   <>Collapse <MdKeyboardArrowUp /></>
-                :   <>Click for details <MdKeyboardArrowDown /></>
+                ?   <span className="small">Collapse <MdKeyboardArrowUp /></span>
+                :   <span className="small">Click for details <MdKeyboardArrowDown /></span>
                 }
             </Button>
         );
@@ -89,7 +88,7 @@ const MovieCard = (props) => {
             case (otherUsers.length > 2):
                 const otherLength = otherUsers.length - 2;
                 return (
-                    <Button variant="link" size="sm" onClick={() => setShowModal(true)}>
+                    <Button variant="link" onClick={() => setShowModal(true)} className="p-0">
                         <span className="small">
                             {usernames[0]}, {usernames[1]}, and {otherLength} other {otherLength === 1 ? 'user' : 'users'} {otherUsers.length < likedUsers.length ? 'also' : null } liked this movie
                         </span>
