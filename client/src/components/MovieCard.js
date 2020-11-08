@@ -1,10 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 // import bootstrap-react components
-import { Accordion, AccordionContext, Button, Card, ResponsiveEmbed, Row, Col } from 'react-bootstrap';
+import { Accordion, AccordionContext, Button, Card, Modal, ResponsiveEmbed, Row, Col } from 'react-bootstrap';
 import StarRatings from 'react-star-ratings';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
-import { MdChevronRight, MdChevronLeft, MdFavoriteBorder, MdClose } from "react-icons/md";
+import {
+    MdChevronRight,
+    MdChevronLeft,
+    MdFavoriteBorder,
+    MdClose,
+    MdKeyboardArrowDown,
+    MdKeyboardArrowUp
+} from "react-icons/md";
 
 
 // import utils
@@ -14,6 +21,7 @@ import { useFantinderContext } from "../utils/GlobalState";
 const MovieCard = (props) => {
     const [state, ] = useFantinderContext();
     const { likedMovies, dislikedMovies } = state;
+    const [showModal, setShowModal] = useState(false);
     const {
         movie,
         displayTrailer,
@@ -37,25 +45,25 @@ const MovieCard = (props) => {
         return (
             <Button
                 variant="link"
-                className={`link ${isCurrentEventKey ? 'text-muted' : '' }`}
+                className={isCurrentEventKey ? 'text-muted p-0' : 'p-0'}
                 onClick={decoratedOnClick}
             >
                 {isCurrentEventKey
-                ?   <span className="small">Collapse <i className="pl-1 fas fa-chevron-up"></i></span>
-                :   <span className="small">Click for details <i className="pl-1 fas fa-chevron-down"></i></span>
+                ?   <span className="small">Collapse <MdKeyboardArrowUp /></span>
+                :   <span className="small">Click for details <MdKeyboardArrowDown /></span>
                 }
             </Button>
         );
     }
 
-    function displayLikedUsers(likedUsers) {
+    const displayLikedUsers = (likedUsers) => {
         if (!likedUsers.length) {
             return null
         }
 
         // get the usernames
         const otherUsers = likedUsers.filter(user => user._id !== state.currentUser);
-        const usernames = otherUsers.filter(user => user.username !== undefined).map(user => user.username);
+        const usernames = otherUsers.filter(user => user.username).map(user => user.username);
 
         // format the liked users for the card
         switch (true) {
@@ -74,15 +82,17 @@ const MovieCard = (props) => {
             case (otherUsers.length === 2):
                 return (
                     <Card.Text className='small'>
-                        {usernames[0]} and {usernames[1]} {otherUsers.length < likedUsers.length ? 'also' : null } liked this movie
+                            {usernames[0]} and {usernames[1]} {otherUsers.length < likedUsers.length ? 'also' : null } liked this movie
                     </Card.Text>
                 )
             case (otherUsers.length > 2):
                 const otherLength = otherUsers.length - 2;
                 return (
-                    <Card.Text className='small'>
-                        {usernames[0]}, {usernames[1]}, and {otherLength} other {otherLength === 1 ? 'user' : 'users'} {otherUsers.length < likedUsers.length ? 'also' : null } liked this movie
-                    </Card.Text>
+                    <Button variant="link" onClick={() => setShowModal(true)} className="p-0">
+                        <span className="small">
+                            {usernames[0]}, {usernames[1]}, and {otherLength} other {otherLength === 1 ? 'user' : 'users'} {otherUsers.length < likedUsers.length ? 'also' : null } liked this movie
+                        </span>
+                    </Button>
                 )
             default:
                 return null
@@ -91,7 +101,8 @@ const MovieCard = (props) => {
 
     return (
         movie
-        ?   <Accordion>
+        ?   <>
+            <Accordion>
             <Card>
                 {displayTrailer && movie.trailer
                     ? <ResponsiveEmbed aspectRatio="16by9">
@@ -183,6 +194,27 @@ const MovieCard = (props) => {
                 </Card.Footer>
                 </Card>
             </Accordion>
+            <Modal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                aria-labelledby='liked-users-modal'>
+                {/* tab container to do either signup or login component */}
+                <Modal.Header closeButton>
+                    <Modal.Title id='liked-users-modal' className="text-dark">
+                        Other users who liked this movie
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-dark">
+                    {movie.likedUsers?.filter(user => user._id !== state.currentUser).map(user => {
+                        return (
+                            <Row className="mb-1 mt-1" key={user._id}>
+                                <Col className="text-left">{user.username}</Col>
+                            </Row>
+                        )
+                    })}
+                </Modal.Body>
+            </Modal>
+            </>
         :   null
     )
 }
