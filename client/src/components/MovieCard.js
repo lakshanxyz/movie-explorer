@@ -129,17 +129,17 @@ const MovieCard = (props) => {
                         </Col>
                     </Row>
                 </Card.Body>
-                    <Accordion.Collapse eventKey={movie._id}>
-                        <Card.Body>
-                            <Card.Text>Plot Summary</Card.Text>
-                            <Card.Text className='small'>{movie.overview}</Card.Text>
-                            <Card.Text className='small'>Release Date: {movie.releaseDate}</Card.Text>
-                            {movie.likedUsers
-                                ? displayLikedUsers(movie.likedUsers)
-                                : <Card.Text className='small'>No users have liked this movie</Card.Text>   
-                            }
-                        </Card.Body>
-                    </Accordion.Collapse>
+                <Accordion.Collapse eventKey={movie._id}>
+                    <Card.Body>
+                        <Card.Text>Plot Summary</Card.Text>
+                        <Card.Text className='small'>{movie.overview}</Card.Text>
+                        <Card.Text className='small'>Release Date: {movie.releaseDate}</Card.Text>
+                        {movie.likedUsers
+                            ? displayLikedUsers(movie.likedUsers)
+                            : <Card.Text className='small'>No users have liked this movie</Card.Text>   
+                        }
+                    </Card.Body>
+                </Accordion.Collapse>
 
                 <Card.Footer className="d-flex justify-content-center align-items-center">
                     { displaySkip

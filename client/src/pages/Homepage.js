@@ -69,7 +69,7 @@ const Homepage = () => {
 
     // hook for displaying a movie
     useEffect(() => {
-        if (movies.length && movieIndex === '') {// show the next movie
+        if (movies.length && movieIndex === '') { // show the next movie
             console.log('There are movies, but no movieIndex. Setting movieIndex')
             // if they're logged in, set it to the first movie they haven't actioned
             if (Auth.loggedIn()){
@@ -94,7 +94,7 @@ const Homepage = () => {
 
     // hook for getting the movies
     useEffect(() => {
-        if (!movies.length) {
+        if (loading && !movies.length) {
             // if we're online, ping the API to get our movie preferences
             try {
                 console.log("Pinging TMDB API to get trending movies");
@@ -153,7 +153,6 @@ const Homepage = () => {
             variables: { movieId: likedMovie._id }
         })
         .then(({data}) => {
-            console.log(data.likeMovie)
             if (data) {
                 // update global state
                 dispatch({
@@ -211,7 +210,6 @@ const Homepage = () => {
     };
 
     const handlePrevMovie = async () => {
-        console.log(movieIndex);
         setLastSwipe('')
         if (movies.length) {
             movieIndex === 0 ? setMovieIndex(movies.length - 1) : setMovieIndex(movieIndex - 1);
@@ -219,7 +217,6 @@ const Homepage = () => {
     }
 
     const handleNextMovie = async () => {
-        console.log(movieIndex);
         setLastSwipe('')
         // put the current movie at the end of the array if it's not the only movie
         if (movies.length) {
@@ -242,7 +239,7 @@ const Homepage = () => {
 
     const handleSwipe = (swipeDirection) => {
         if (swipeDirection === direction.RIGHT) {
-            setLastSwipe('right')
+            setLastSwipe('right');
             if (Auth.loggedIn()) {
                 handleLikeMovie(movies[movieIndex]);
             } else {
@@ -265,32 +262,30 @@ const Homepage = () => {
                     <h1>Welcome to Movie Explorer!</h1>
                     {Auth.loggedIn()
                         ? <h4>A swipe right saves a movie. A swipe left passes.</h4>
-                        : <h4>Swipe or click through some of the trending movies!</h4>
+                        : <h4>Swipe or click through this week's trending movies.</h4>
                     }
                 </Container>
             </Jumbotron>
 
             <Container>
                 {loading ? <h2>Loading....</h2> : null}
-                {movies.length
-                ?   moviesToDisplay
-                    ?   <Swipeable
-                            onSwipe={handleSwipe}
-                            fadeThreshold={200}
-                            swipeThreshold={40}
-                            onAfterSwipe={() => console.log(`${movies[movieIndex].title} swiped`)}>
-                            <MovieCard
-                                movie={movies[movieIndex]}
-                                displayTrailer
-                                displaySkip
-                                likeMovieHandler={handleLikeMovie}
-                                dislikeMovieHandler={handleDislikeMovie}
-                                nextMovieHandler={handleNextMovie}
-                                prevMovieHandler={handlePrevMovie}
-                            />
-                        </Swipeable>
-                    :   <h3 className="text-center">No more movies to display!</h3>
-                :  null
+                {moviesToDisplay
+                ?   <Swipeable
+                        onSwipe={handleSwipe}
+                        fadeThreshold={200}
+                        swipeThreshold={40}
+                        onAfterSwipe={() => console.log(`${movies[movieIndex].title} swiped`)}>
+                        <MovieCard
+                            movie={movies[movieIndex]}
+                            displayTrailer
+                            displaySkip
+                            likeMovieHandler={handleLikeMovie}
+                            dislikeMovieHandler={handleDislikeMovie}
+                            nextMovieHandler={handleNextMovie}
+                            prevMovieHandler={handlePrevMovie}
+                        />
+                    </Swipeable>
+                :   <h3 className="text-center">No more movies to display!</h3>
                 }
                 <h4 className="text-center mt-3">
                     {lastSwipe ? `You swiped ${lastSwipe} on ${movies[movieIndex].title}!` : null}
