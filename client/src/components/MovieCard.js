@@ -201,17 +201,14 @@ const MovieCard = (props) => {
                 {/* tab container to do either signup or login component */}
                 <Modal.Header closeButton>
                     <Modal.Title id='liked-users-modal' className="text-dark">
-                        Users who liked this movie
+                        Other users who liked this movie
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="text-dark">
                     {movie.likedUsers?.filter(user => user._id !== state.currentUser).map(user => {
                         return (
-                            <Row className="mt-3" key={user._id}>
-                                <Col sm={{span: 4, offset: 2}} className="text-left">{user.username}</Col>
-                                <Col className="text-center">
-                                    <Button size='sm'>Follow</Button>
-                                </Col>
+                            <Row className="mb-1 mt-1" key={user._id}>
+                                <Col className="text-left">{user.username}</Col>
                             </Row>
                         )
                     })}
